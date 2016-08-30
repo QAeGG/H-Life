@@ -1,7 +1,8 @@
 *** Settings ***
-Library            Selenium2Library
-Library            ImapLibrary
-Library            String
+Library    Selenium2Library
+Library    ImapLibrary
+Library    String
+Library    HttpLibrary.HTTP
 
 *** Keywords ***
 Get OTP H Life via Email
@@ -24,8 +25,12 @@ Login H Life
     Click Element    id=request_otp_close
     ${OTP}=    Get OTP H Life via Email
     Input Text    id=otp    ${OTP}
-    Click Element    id=submit    
-
+    Click Element    id=submit
+        
+#Set Header
+#    Set Request Header    x_oper    TRUEH
+#    Set Request Header    x_msisdn    66863351883
+#    POST    ${URL}
 Change Language
     [arguments]    ${LANG}
     Wait Until Page Contains Element    css=img.flag    timeout=20

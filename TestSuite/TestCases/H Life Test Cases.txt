@@ -2,26 +2,18 @@
 Resource           ../Keywords/HLife_Keyword.txt
 Variables          ../TestData/HLife.yaml
 Default Tags       Sanity
-Suite Setup        Open Browser   http://hlife.truecorp.co.th/    ff    ff_profile_dir=/WorkingArea/ff_profile
+Suite Setup        Open Browser   ${URL}    ff    ff_profile_dir=${ff_profile}
+Test Setup         Create HTTP Context ${URL}
 Suite TearDown     Close Browser 
 
 *** Test Cases ***
-#H Life View Messages
-#    [Tags]   View True Message 
-#    Login H Life    0970895517
-#    Change Language    TH
-#    Change Language    EN
-#    แสดงหมายเลขผู้ใช้งาน  
-#    แสดงจำนวนข้อความจากทรูมูฟ
-#    H Life Menu    AccountInfo
-#    View Account Info
-#    View TruemoveH Message
-#    Return Main Page
 H Life View Account Information
     [Documentation]    View detail of Usage Information
     [Tags]    Post-Paid    Pre-Paid
+    Set Header
     H Life Menu    AccountInfo 
     View Account Info
+*** Comments ***
 H Life View Usage Information
     [Documentation]    View detail of Usage Information
     [Tags]    Post-Paid    Pre-Paid    
