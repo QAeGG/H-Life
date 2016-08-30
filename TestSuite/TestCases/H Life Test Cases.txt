@@ -10,10 +10,8 @@ Suite TearDown     Close Browser
 H Life View Account Information
     [Documentation]    View detail of Usage Information
     [Tags]    Post-Paid    Pre-Paid
-    Set Header
     H Life Menu    AccountInfo 
     View Account Info
-*** Comments ***
 H Life View Usage Information
     [Documentation]    View detail of Usage Information
     [Tags]    Post-Paid    Pre-Paid    
