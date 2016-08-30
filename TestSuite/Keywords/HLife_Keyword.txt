@@ -2,7 +2,7 @@
 Library    Selenium2Library
 Library    ImapLibrary
 Library    String
-Library    HttpLibrary.HTTP
+#Library    HttpLibrary.HTTP
 
 *** Keywords ***
 Get OTP H Life via Email
