@@ -1,0 +1,290 @@
+*** Settings ***
+Library            Selenium2Library
+Library            ImapLibrary
+Library            String
+
+*** Keywords ***
+Get OTP H Life via Email
+    Open Mailbox    host=imap.gmail.com     user=eggnian@gmail.com   password=eGGdigital1    port=993    is_secure=True
+    ${LATEST}=  Wait for Mail   subject=Forwarded    timeout=150
+    ${parts}=     Walk Multipart Email    ${LATEST}        
+    ${EmailBody}=     Get Email Body    ${LATEST}
+    @{OTP} =    Split String    ${EmailBody}    
+    Log To Console    OTP Code:@{OTP}[1]
+    Delete Email   ${LATEST}
+    Close Mailbox
+    [Return]    @{OTP}[1]
+
+Login H Life
+    [arguments]    ${USERNAME}
+    Input Text    id=service_number    ${USERNAME}
+    Click Element    id=request_otp
+    Page Should Contain Element    css=.modal-body
+    Capture Page Screenshot
+    Click Element    id=request_otp_close
+    ${OTP}=    Get OTP H Life via Email
+    Input Text    id=otp    ${OTP}
+    Click Element    id=submit    
+
+Change Language
+    [arguments]    ${LANG}
+    Wait Until Page Contains Element    css=img.flag    timeout=20
+    ${CurrentLang}=    Run Keyword And Return Status    Element Should Be Visible
+    ...    xpath=//img[(@alt='English')]
+    Mouse Over    css=img.flag
+    Capture Page Screenshot   
+    Run Keyword If    '${CurrentLang}' == 'True' and '${LANG}' == 'TH'
+    ...    Select Language
+    Run Keyword If    '${CurrentLang}' == 'False' and '${LANG}' == 'EN'
+    ...    Select Language
+    Capture Page Screenshot 
+
+Select Language
+    Click Element    css=li>a>span
+
+H Life Menu
+    [Documentation]    Sub menu
+    ...                - AccountInfo
+    ...                - UsageInfo
+    ...                - BuyTopping
+    ...                - Privilege
+    ...                - Topup
+    ...                - History
+    [arguments]    ${submenu}
+    #subment
+    Click Element    id=showLeftPush
+    Wait Until Page Contains Element    css=.badge    timeout=10
+    Capture Page Screenshot
+    Run Keyword If    '${submenu}' == 'AccountInfo'    Click Element
+    ...    xpath=.//*[@id='profile']/span
+    Run Keyword If    '${submenu}' == 'UsageInfo'      Click Element    id=datausage
+    Run Keyword If    '${submenu}' == 'BuyTopping'     Click Element    id=packages
+    Run Keyword If    '${submenu}' == 'Privilege'      Click Element    id=privilege
+    Run Keyword If    '${submenu}' == 'Topup'          Click Element    id=topup-payment
+    Run Keyword If    '${submenu}' == 'History'        Click Element
+    ...    xpath=//*[@id='cbp-spmenu-s1']/ul/li[5]/a
+    Run Keyword If    '${submenu}' == 'Settings'       Click Element 
+    ...    xpath=.//*[@id='cbp-spmenu-s1']/ul/li[6]/a
+    Run Keyword If    '${submenu}' == 'Help'           Click Element
+    ...    xpath=.//*[@id='cbp-spmenu-s1']/ul/li[7]/a
+    Capture Page Screenshot
+
+View TruemoveH Message
+    ${NoSMS}=    Get Element Attribute    css=.badge.total-sms@innerText
+    Log to Console  Total SMS: ${NoSMS}
+    Click Element    css=.badge.total-sms
+    Capture Page Screenshot
+    Click Element    css=.h-message-summary
+    ${getMessaNo}=    Get Element Attribute    css=.h-message-summary@innerText
+    Log to Console    ${getMessaNo}
+    ${LoadMore}=    Run Keyword And Return Status    Check Load More Link
+    Run Keyword If    '${LoadMore}' == 'True'     Click Element    css=.more
+    Capture Page Screenshot  
+
+Delete TruemoveH Message 
+#    Click Element    xpath=//*[@id='collapsemessage']/p[1]/a
+#    Page Should Contain    ต้องการลบหรือไม่  ?
+
+    
+View Account Info
+    Wait Until Page Contains Element    css=.control-label    timeout=60
+    ${TNumber}=    Get Element Attribute    
+    ...    //*[@class='form-horizontal']/div[4]/label@innerText
+    ${PNumber}=    Get Element Attribute
+    ...    //*[@class='form-horizontal']/div[4]/div/p@innerText
+    Log to Console    ${TNumber} ${PNumber}
+    ${TName}=    Get Element Attribute    
+    ...    //*[@class='form-horizontal']/div[5]/label@innerText
+    ${Name}=    Get Element Attribute
+    ...    //*[@class='form-horizontal']/div[5]/div/p@innerText
+    Log to Console    ${TName} ${Name}
+    ${TStatus}=    Get Element Attribute 
+    ...    //*[@class='form-horizontal']/div[6]/label@innerText
+    ${Status}=    Get Element Attribute
+    ...    //*[@class='form-horizontal']/div[6]/div/p@innerText
+    Log to Console    ${TStatus} ${Status}
+    ${PromotionMore}=    Run Keyword And Return Status
+    ...    Page Should Contain Element    css=.more
+    Run Keyword If    '${PromotionMore}' == 'True'
+    ...    Click Element    css=.more
+    ${TPromotion}=    Get Element Attribute 
+    ...    //*[@class='form-horizontal']/div[7]/label@innerText
+    ${Promotion}=    Get Element Attribute
+    ...    //*[@class='form-horizontal']/div[7]/div/p@innerText
+    Log to Console    ${TPromotion} ${Promotion}
+    ${TBalance}=    Get Element Attribute 
+    ...    //*[@class='form-horizontal']/div[8]/label@innerText
+    ${Balance}=    Get Element Attribute
+    ...    //*[@class='form-horizontal']/div[8]/div/p@innerText
+    Log to Console    ${TBalance} ${Balance}
+    ${chknumbertype}=    Run Keyword And Return Status    Wait Until Page Contains Element
+    ...    //*[@class='form-horizontal']/div[9]/label    timeout=2
+    Run Keyword If    '${chknumbertype}' == 'True'    Prepaid Expire Date
+    Run Keyword If    '${chknumbertype}' == 'True'    Log Many
+    ...    ${TNumber} ${PNumber}
+    ...    ${TName} ${Name}    ${TStatus} ${Status}
+    ...    ${TPromotion} ${Promotion}    ${TBalance} ${Balance} 
+    ...    ${EXPDATE} ${EXPIREDATE}
+    ...    ELSE    Log Many    ${TNumber} ${PNumber}    ${TName} ${Name}
+    ...    ${TStatus}  ${Status}    ${TPromotion} ${Promotion}
+    ...    ${TBalance} ${Balance}
+    Capture Page Screenshot
+
+Prepaid Expire Date
+    ${TExpire}=    Get Element Attribute 
+    ...    //*[@class='form-horizontal']/div[9]/label@innerText
+    ${Expire}=    Get Element Attribute
+    ...    //*[@class='form-horizontal']/div[9]/div/p@innerText
+    Log to Console    ${TExpire} : ${Expire}
+    Set Global Variable   ${EXPDATE}    ${TExpire}
+    Set Global Variable   ${EXPIREDATE}    ${Expire}
+
+Check Load More Link 
+    Wait Until Page Contains Element    css=.more    timeout=10
+    Sleep    0.2
+
+View Payment
+    Wait Until Page Contains Element    xpath=//*[@id='pri-reccomend']/div[1]/div    timeout=10
+    Get Element Attribute    //*[@id='pri-reccomend']/div[1]/div@innerText
+    Capture Page Screenshot
+    
+View Topup
+    Click Element    id=topup-payment
+    Sleep    0.2
+    Capture Page Screenshot
+
+View Usage Info
+    Wait Until Page Contains Element    css=.promotion>a    timeout=10
+    Click Element    css=.promotion>a
+    Sleep    0.2
+    Capture Page Screenshot
+    Click Element    css=.vas>a
+    Sleep    0.2
+    Capture Page Screenshot
+    Click Element    css=.voice>a
+    Sleep    0.2
+    Capture Page Screenshot
+
+View Buy Topping
+    Wait Until Page Contains Element    css=#tab_1    timeout=10
+    Click Element    css=#tab_1
+    Sleep    0.2
+    Capture Page Screenshot
+    Click Element    css=#tab_2
+    Sleep    0.2
+    Capture Page Screenshot
+    Click Element    css=#tab_3
+    Sleep    0.2
+    Capture Page Screenshot
+
+View Privilege
+    Click Element    css=.menu_promotion.active
+    Sleep    0.2
+    Capture Page Screenshot
+    Click Element    css=.menu_reward
+    Sleep    0.2
+    Capture Page Screenshot
+    Click Element    css=.menu_bonus
+    Sleep    0.2
+    Capture Page Screenshot
+
+View History
+    [arguments]    ${month}    ${year}    ${status}
+    Wait Until Page Contains Element    id=history_month    timeout=30
+    Select From List    id=history_month    ${month}
+    Select From List    id=history_year     ${year}
+    Select From List    id=order_status     ${status}
+    Click Element    xpath=//*[@id='history_search']/div[4]/fieldset/button
+    ${waitnotfound}=    Run Keyword And Return Status    Wait Data not found
+    Get Total Price
+
+Wait Data not found
+    Wait Until Page Contains Element    xpath=//*[@id='history']/tbody/tr/td/div    timeout=10
+
+Get Total Price
+    ${price}=   Get Element Attribute    price@innerText
+    Run Keyword If    '${price}' == '0'    Log    History data not found
+    ...    ELSE    Log    Total: ${price} Baht
+    Run Keyword If    '${price}' != '0'    View Detail Order       
+
+View Detail Order
+    Click Element    xpath=//*[@id='history']/tbody/tr[1]/td[1]/a
+    Wait Until Page Contains Element    xpath=//*[@id='data']/div[2]/div[1]/p    timeout=10
+    ${orderid}=    Get Element Attribute    //*[@id='data']/div[2]/div[2]/form/div[4]/div/p@innerText
+    ${orderdate}=    Get Element Attribute    //*[@id='data']/div[2]/div[2]/form/div[5]/div/p@innerText
+    ${package}=    Get Element Attribute    //*[@id='data']/div[2]/div[2]/form/div[6]/div/p@innerText
+    ${prices}=    Get Element Attribute    //*[@id='data']/div[2]/div[2]/form/div[7]/div/p@innerText 
+    ${status}=    Get Element Attribute    //*[@id='data']/div[2]/div[2]/form/div[8]/div/p/span@innerText
+    Log Many    Order ID :${orderid}    Order date :${orderdate}    Package :${package}
+    ...    Price :${prices}    Status :${status}
+    Capture Page Screenshot
+    Click Element    xpath=//*[@id='data']/div[2]/div[2]/div/a
+    Wait Until Page Contains Element    id=history_month    timeout=10  
+
+View Settings
+    Wait Until Page Contains Element    xpath=.//*[@id='data']/div[2]/div[1]/p[1]    timeout=10
+    Capture Page Screenshot
+
+View Help
+    Wait Until Page Contains Element    xpath=.//*[@id='myTab']/li[1]/a
+    Capture Page Screenshot
+    Click Element    xpath=.//*[@id='myTab']/li[2]/a
+    Sleep    0.2
+    Capture Page Screenshot
+    Click Element    xpath=.//*[@id='myTab']/li[3]/a
+    Sleep    0.2
+    Click Element    xpath=.//*[@id='accordion3']/div/div[1]/a/div[1]
+    Click Element    xpath=.//*[@id='faq3']/div[2]/div[1]/a/div[1]
+    Click Element    xpath=.//*[@id='faq3']/div[3]/div[1]/a/div[1]
+    Click Element    xpath=.//*[@id='faq3']/div[4]/div[1]/a/div[1]
+    Capture Page Screenshot
+แสดงจำนวนข้อความจากทรูมูฟ
+    ${TRUEMessages}=    Get Text    html/body/div[5]/div[2]/div[2]/div[1]/div[2]/p/a/span
+    Log    TruemoveH message : ${TRUEMessages}
+    Click Link    link=number
+    ${SMSbar}=    Get Element Attribute     '//*[@id='info']/div[2]/div[2]/p@class'
+    Capture Page Screenshot
+    Run Keyword If    '${SMSbar}'=='sms-bar collapsed'
+    ...    Click Element    xpath=//*[@id='info']/div[2]/div[2]/p
+    ${GetStatus}=    Run Keyword And Return Status    Page Should Contain Element    css=more    timeout=10
+    Run Keyword If    ${GetStatus}    Click Element    css=more
+    Capture Page Screenshot
+
+แสดงหมายเลขผู้ใช้งาน    
+    Wait Until Page Contains Element    id=one_service_number    timeout=10
+    ${ServiceNo}=    Get Selected List Value    id=one_service_number
+    Log    Service Number :' ${ServiceNo} '
+    Get Text    html/body/div[5]/div[2]/div[2]/div[1]/div[2]/p/a/span
+
+Verify Load More Exist
+    Page Should Contain Element    css=more    timeout=10
+    [Return]  ${ftemp}    
+
+
+Verify Menu Exist
+    ${UsageInfo}=    Run Keyword And Return Status    Page Should Contains Element    
+    ...    id=datausage   
+    ${BuyTopping}=    Run Keyword And Return Status    Page Should Contains Element    
+    ...    id=packages
+    ${Privilege}=    Run Keyword And Return Status    Page Should Contains Element    
+    ...    id=privilege
+    ${Payment}=    Run Keyword And Return Status    Page Should Contains Element    
+    ...    id=topup-payment
+    ${AccountInfo}=    Run Keyword And Return Status    Page Should Contains Element    
+    ...    id=profile 
+    Run Keyword If    ${UsageInfo}    Log    แสดงเมนู    ${.//*[@id='datausage']/p[1]}
+
+Get Menu Name
+    [arguments]    ${boxcenter}
+    Get Element Attribute    '${boxcenter}@text'
+
+Return Main Page
+    Click Element    id=#winner_return
+    Wait Until Page Contains Element    css=.title.float-left    timeout=20
+    Capture Page Screenshot
+
+Check Error
+    Element Should Not Be Visible    css=.title.float-left    message=ขออภัยค่ะ ไม่สามารถดึงข้อมูลส่วนตัวได้ในขณะนี้ เนื่องจากมีผู้ใช้งานจำนวนมาก กรุณาลองใหม่อีกครั้ง
+
+
+
