@@ -3,7 +3,7 @@ Resource           ../Keywords/HLife_Keyword.txt
 Variables          ../TestData/HLife.yaml
 Default Tags       Sanity
 Suite Setup        Open Browser   http://${URL}    ff    ff_profile_dir=${ff_profile}
-#Test Setup         Create HTTP Context ${URL}
+Test Setup         Maximize Browser Window
 Suite TearDown     Close Browser 
 
 *** Test Cases ***
