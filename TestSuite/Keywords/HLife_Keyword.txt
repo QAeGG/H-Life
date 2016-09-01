@@ -56,7 +56,7 @@ H Life Menu
     ...                - Topup
     ...                - History
     [arguments]    ${submenu}
-    #subment
+    Wait Until Page Contains Element    id=showLeftPush    timeout=60
     Click Element    id=showLeftPush
     Wait Until Page Contains Element    css=.badge    timeout=20
     Capture Page Screenshot
