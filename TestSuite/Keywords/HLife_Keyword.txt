@@ -29,7 +29,8 @@ Login H Life
 
 Initial Browser
     Open Browser   http://${URL}    ff    ff_profile_dir=${ff_profile}
-    Maximize Browser Window        
+    Maximize Browser Window 
+    Set Selenium Speed    0.5
 
 Change Language
     [arguments]    ${LANG}
@@ -145,7 +146,6 @@ Prepaid Expire Date
 
 Check Load More Link 
     Wait Until Page Contains Element    css=.more    timeout=20
-    Sleep    0.2
 
 View Payment
     Wait Until Page Contains Element    xpath=//*[@id='pri-reccomend']/div[1]/div    timeout=20
@@ -154,43 +154,33 @@ View Payment
     
 View Topup
     Click Element    id=topup-payment
-    Sleep    0.2
     Capture Page Screenshot
 
 View Usage Info
     Wait Until Page Contains Element    css=.promotion>a    timeout=20
     Click Element    css=.promotion>a
-    Sleep    0.2
     Capture Page Screenshot
     Click Element    css=.vas>a
-    Sleep    0.2
     Capture Page Screenshot
     Click Element    css=.voice>a
-    Sleep    0.2
     Capture Page Screenshot
 
 View Buy Topping
     Wait Until Page Contains Element    css=#tab_1    timeout=20
     Click Element    css=#tab_1
-    Sleep    0.2
     Capture Page Screenshot
     Click Element    css=#tab_2
-    Sleep    0.2
     Capture Page Screenshot
     Click Element    css=#tab_3
-    Sleep    0.2
     Capture Page Screenshot
 
 View Privilege
     Wait Until Page Contains Element    css=.menu_promotion.active    timeout=20
     Click Element    css=.menu_promotion.active
-    Sleep    0.2
     Capture Page Screenshot
     Click Element    css=.menu_reward
-    Sleep    0.2
     Capture Page Screenshot
     Click Element    css=.menu_bonus
-    Sleep    0.2
     Capture Page Screenshot
 
 View History
@@ -234,10 +224,8 @@ View Help
     Wait Until Page Contains Element    xpath=.//*[@id='myTab']/li[1]/a    timeout=20
     Capture Page Screenshot
     Click Element    xpath=.//*[@id='myTab']/li[2]/a
-    Sleep    0.2
     Capture Page Screenshot
     Click Element    xpath=.//*[@id='myTab']/li[3]/a
-    Sleep    0.2
     Click Element    xpath=.//*[@id='accordion3']/div/div[1]/a/div[1]
     Click Element    xpath=.//*[@id='faq3']/div[2]/div[1]/a/div[1]
     Click Element    xpath=.//*[@id='faq3']/div[3]/div[1]/a/div[1]
