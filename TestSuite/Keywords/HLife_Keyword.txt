@@ -60,8 +60,7 @@ H Life Menu
     Click Element    id=showLeftPush
     Wait Until Page Contains Element    css=.badge    timeout=20
     Capture Page Screenshot
-    Run Keyword If    '${submenu}' == 'AccountInfo'    Click Element
-    ...    xpath=.//*[@id='profile']/span
+    Run Keyword If    '${submenu}' == 'AccountInfo'    Click Element    id=profile
     Run Keyword If    '${submenu}' == 'UsageInfo'      Click Element    id=datausage
     Run Keyword If    '${submenu}' == 'BuyTopping'     Click Element    id=packages
     Run Keyword If    '${submenu}' == 'Privilege'      Click Element    id=privilege
