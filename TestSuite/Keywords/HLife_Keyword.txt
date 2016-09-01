@@ -26,11 +26,11 @@ Login H Life
     ${OTP}=    Get OTP H Life via Email
     Input Text    id=otp    ${OTP}
     Click Element    id=submit
-        
-#Set Header
-#    Set Request Header    x_oper    TRUEH
-#    Set Request Header    x_msisdn    66863351883
-#    POST    ${URL}
+
+Initial Browser
+    Open Browser   http://${URL}    ff    ff_profile_dir=${ff_profile}
+    Maximize Browser Window        
+
 Change Language
     [arguments]    ${LANG}
     Wait Until Page Contains Element    css=img.flag    timeout=20
@@ -58,7 +58,7 @@ H Life Menu
     [arguments]    ${submenu}
     #subment
     Click Element    id=showLeftPush
-    Wait Until Page Contains Element    css=.badge    timeout=10
+    Wait Until Page Contains Element    css=.badge    timeout=20
     Capture Page Screenshot
     Run Keyword If    '${submenu}' == 'AccountInfo'    Click Element
     ...    xpath=.//*[@id='profile']/span
@@ -145,11 +145,11 @@ Prepaid Expire Date
     Set Global Variable   ${EXPIREDATE}    ${Expire}
 
 Check Load More Link 
-    Wait Until Page Contains Element    css=.more    timeout=10
+    Wait Until Page Contains Element    css=.more    timeout=20
     Sleep    0.2
 
 View Payment
-    Wait Until Page Contains Element    xpath=//*[@id='pri-reccomend']/div[1]/div    timeout=10
+    Wait Until Page Contains Element    xpath=//*[@id='pri-reccomend']/div[1]/div    timeout=20
     Get Element Attribute    //*[@id='pri-reccomend']/div[1]/div@innerText
     Capture Page Screenshot
     
@@ -159,7 +159,7 @@ View Topup
     Capture Page Screenshot
 
 View Usage Info
-    Wait Until Page Contains Element    css=.promotion>a    timeout=10
+    Wait Until Page Contains Element    css=.promotion>a    timeout=20
     Click Element    css=.promotion>a
     Sleep    0.2
     Capture Page Screenshot
@@ -171,7 +171,7 @@ View Usage Info
     Capture Page Screenshot
 
 View Buy Topping
-    Wait Until Page Contains Element    css=#tab_1    timeout=10
+    Wait Until Page Contains Element    css=#tab_1    timeout=20
     Click Element    css=#tab_1
     Sleep    0.2
     Capture Page Screenshot
@@ -183,6 +183,7 @@ View Buy Topping
     Capture Page Screenshot
 
 View Privilege
+    Wait Until Page Contains Element    css=.menu_promotion.active    timeout=20
     Click Element    css=.menu_promotion.active
     Sleep    0.2
     Capture Page Screenshot
@@ -195,16 +196,16 @@ View Privilege
 
 View History
     [arguments]    ${month}    ${year}    ${status}
-    Wait Until Page Contains Element    id=history_month    timeout=30
+    Wait Until Page Contains Element    id=history_month    timeout=20
     Select From List    id=history_month    ${month}
     Select From List    id=history_year     ${year}
-    Select From List    id=order_status     ${status}
+    Select From List By Value    id=order_status     ${status}
     Click Element    xpath=//*[@id='history_search']/div[4]/fieldset/button
     ${waitnotfound}=    Run Keyword And Return Status    Wait Data not found
     Get Total Price
 
 Wait Data not found
-    Wait Until Page Contains Element    xpath=//*[@id='history']/tbody/tr/td/div    timeout=10
+    Wait Until Page Contains Element    xpath=//*[@id='history']/tbody/tr/td/div    timeout=20
 
 Get Total Price
     ${price}=   Get Element Attribute    price@innerText
@@ -214,7 +215,7 @@ Get Total Price
 
 View Detail Order
     Click Element    xpath=//*[@id='history']/tbody/tr[1]/td[1]/a
-    Wait Until Page Contains Element    xpath=//*[@id='data']/div[2]/div[1]/p    timeout=10
+    Wait Until Page Contains Element    xpath=//*[@id='data']/div[2]/div[1]/p    timeout=20
     ${orderid}=    Get Element Attribute    //*[@id='data']/div[2]/div[2]/form/div[4]/div/p@innerText
     ${orderdate}=    Get Element Attribute    //*[@id='data']/div[2]/div[2]/form/div[5]/div/p@innerText
     ${package}=    Get Element Attribute    //*[@id='data']/div[2]/div[2]/form/div[6]/div/p@innerText
@@ -224,14 +225,14 @@ View Detail Order
     ...    Price :${prices}    Status :${status}
     Capture Page Screenshot
     Click Element    xpath=//*[@id='data']/div[2]/div[2]/div/a
-    Wait Until Page Contains Element    id=history_month    timeout=10  
+    Wait Until Page Contains Element    id=history_month    timeout=20  
 
 View Settings
-    Wait Until Page Contains Element    xpath=.//*[@id='data']/div[2]/div[1]/p[1]    timeout=10
+    Wait Until Page Contains Element    xpath=.//*[@id='data']/div[2]/div[1]/p[1]    timeout=20
     Capture Page Screenshot
 
 View Help
-    Wait Until Page Contains Element    xpath=.//*[@id='myTab']/li[1]/a
+    Wait Until Page Contains Element    xpath=.//*[@id='myTab']/li[1]/a    timeout=20
     Capture Page Screenshot
     Click Element    xpath=.//*[@id='myTab']/li[2]/a
     Sleep    0.2
@@ -256,7 +257,7 @@ View Help
     Capture Page Screenshot
 
 แสดงหมายเลขผู้ใช้งาน    
-    Wait Until Page Contains Element    id=one_service_number    timeout=10
+    Wait Until Page Contains Element    id=one_service_number    timeout=20
     ${ServiceNo}=    Get Selected List Value    id=one_service_number
     Log    Service Number :' ${ServiceNo} '
     Get Text    html/body/div[5]/div[2]/div[2]/div[1]/div[2]/p/a/span
