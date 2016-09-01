@@ -3,10 +3,10 @@ USER:   eggnian@gmail.com
 PASSWORD:  eGGdigital1
 URL:    hlife.truecorp.co.th
 ff_profile:    C:\common\FF-Profile
-PHONENO:    0970895517
+PHONENO:    "0970895517"
 LANGUAGE:    TH
 EXPDATE:    /
 EXPIREDATE:    /
-MONTH:    07
-YEAR:    2016
+MONTH:    "07"
+YEAR:    "2016"
 STATUS:    all
