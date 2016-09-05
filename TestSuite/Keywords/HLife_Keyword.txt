@@ -30,7 +30,7 @@ Login H Life
 Initial Browser
     Open Browser   http://${URL}    ff    ff_profile_dir=${ff_profile}
     Maximize Browser Window 
-    Set Selenium Speed    0.5
+    Set Selenium Speed    0.2
 
 Change Language
     [arguments]    ${LANG}
