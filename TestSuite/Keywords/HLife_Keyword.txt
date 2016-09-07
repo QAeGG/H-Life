@@ -61,13 +61,14 @@ H Life Menu
     Click Element    id=showLeftPush
     Wait Until Page Contains Element    css=.badge    timeout=20
     Capture Page Screenshot
-    Run Keyword If    '${submenu}' == 'AccountInfo'    Click Element    id=profile
+    Run Keyword If    '${submenu}' == 'AccountInfo'    Click Element
+    ...    xpath=.//*[@id='profile']/span
     Run Keyword If    '${submenu}' == 'UsageInfo'      Click Element    id=datausage
     Run Keyword If    '${submenu}' == 'BuyTopping'     Click Element    id=packages
-    Run Keyword If    '${submenu}' == 'Privilege'      Click Element    id=privilege
+    Run Keyword If    '${submenu}' == 'Privilege'      Click Element    xpath=.//*[@id='privilege']/p[1]
     Run Keyword If    '${submenu}' == 'Topup'          Click Element    id=topup-payment
     Run Keyword If    '${submenu}' == 'History'        Click Element
-    ...    xpath=//*[@id='cbp-spmenu-s1']/ul/li[5]/a
+    ...    xpath=.//*[@id='cbp-spmenu-s1']/ul/li[5]/a
     Run Keyword If    '${submenu}' == 'Settings'       Click Element 
     ...    xpath=.//*[@id='cbp-spmenu-s1']/ul/li[6]/a
     Run Keyword If    '${submenu}' == 'Help'           Click Element

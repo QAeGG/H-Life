@@ -15,6 +15,7 @@ H Life View Usage Information
     [Documentation]    View detail of Usage Information
     [Tags]    Post-Paid    Pre-Paid    
     H Life Menu    UsageInfo
+    View Usage Info
 H Life View Payment
     [Documentation]    View detail of Payment
     [Tags]    Post-Paid    
